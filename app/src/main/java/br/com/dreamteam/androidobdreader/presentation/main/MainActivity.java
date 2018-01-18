@@ -1,4 +1,4 @@
-package br.com.dreamteam.androidobdreader;
+package br.com.dreamteam.androidobdreader.presentation.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,9 +7,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import javax.inject.Inject;
 
-    private TextView mTextMessage;
+import br.com.dreamteam.androidobdreader.ObdReaderApplication;
+import br.com.dreamteam.androidobdreader.R;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * @author João Luiz Vieira <vieira.jluiz@gmail.com>.
+ */
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+    @Inject
+    MainActivityContract.Presenter presenter;
+    @BindView(R.id.app_version)
+    TextView textView;
+
+    @BindView(R.id.navigation)
+    BottomNavigationView navigation;
+
+    @BindView(R.id.message)
+    TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -36,9 +54,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        ButterKnife.bind(this);
+
+        ((ObdReaderApplication) getApplication()).component().inject(this);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.onViewResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        presenter.onViewPause(this);
+    }
+
+    @Override
+    public void showAppVersion(String appVersion) {
+        textView.setText(appVersion);
+    }
 }

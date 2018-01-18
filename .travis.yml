@@ -64,7 +64,9 @@ install: skip
 #     - PATH=/usr/local/android-sdk/tools/bin:$PATH
 
 script:
+  - ./gradlew connectedCheck
   - ./gradlew connectedAndroidTest
+  - ./gradlew build jacocoTestReport assembleAndroidTest
   - sonar-scanner
 # android:
 #   components:
@@ -81,6 +83,9 @@ script:
 #     - extra-android-support
 
 # jdk: oraclejdk8
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 matrix:
   include:

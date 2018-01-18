@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidObdReader.iml" filepath="$PROJECT_DIR$/AndroidObdReader.iml" />
+      <module fileurl="file://C:\git\AndroidObdReader\AndroidObdReader.iml" filepath="C:\git\AndroidObdReader\AndroidObdReader.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\git\AndroidObdReader\app\app.iml" filepath="C:\git\AndroidObdReader\app\app.iml" />
     </modules>
   </component>
 </project>
