@@ -3,6 +3,12 @@ jdk: oraclejdk8
 
 #sudo: false
 
+addons:
+  sonarcloud:
+    organization: "dream-team"
+    token:
+      secure: '$SONAR_TOKEN'
+
 android:
   components:
     # Uncomment the lines below if you want to
@@ -59,6 +65,7 @@ install: skip
 
 script:
   - ./gradlew connectedAndroidTest
+  - sonar-scanner
 # android:
 #   components:
 #     - tools
