@@ -58,9 +58,10 @@ public class MainActivityTest {
 
     @Test
     public void test_AppVersion() {
-        viewArgumentCaptor = ArgumentCaptor.forClass(MainActivityContract.View.class);
-        verify(presenter).onViewResume(viewArgumentCaptor.capture());
-
+        activityRule.getActivity().runOnUiThread(() -> {
+            viewArgumentCaptor = ArgumentCaptor.forClass(MainActivityContract.View.class);
+            verify(presenter).onViewResume(viewArgumentCaptor.capture());
+        });
         activityRule.getActivity().runOnUiThread(() -> viewArgumentCaptor.getValue().showAppVersion("1.5.4"));
 
         onView(withId(R.id.app_version))
