@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 
 /**
  * Decorated {@link ThreadPoolExecutor}
+ *
  * @author João Luiz Vieira <vieira.jluiz@gmail.com>.
  */
 @Singleton

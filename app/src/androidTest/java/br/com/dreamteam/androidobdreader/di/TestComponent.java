@@ -3,6 +3,10 @@ package br.com.dreamteam.androidobdreader.di;
 
 import javax.inject.Singleton;
 
+import br.com.dreamteam.androidobdreader.presentation.connection.fragments.connecting.ConnectingFragmentTest;
+import br.com.dreamteam.androidobdreader.presentation.connection.fragments.connectobd.ConnectObdFragmentTest;
+import br.com.dreamteam.androidobdreader.presentation.connection.fragments.discovery.DiscoveryFragmentTest;
+import br.com.dreamteam.androidobdreader.presentation.connection.fragments.turnvehicleon.TurnVehicleOnFragmentTest;
 import br.com.dreamteam.androidobdreader.presentation.main.MainActivityTest;
 import dagger.Component;
 
@@ -18,4 +22,11 @@ public interface TestComponent extends AppComponent {
 
     void inject(MainActivityTest mainActivityTest);
 
+    void inject(ConnectObdFragmentTest connectObdFragmentTest);
+
+    void inject(TurnVehicleOnFragmentTest turnVehicleOnFragmentTest);
+
+    void inject(DiscoveryFragmentTest discoveryFragmentTest);
+
+    void inject(ConnectingFragmentTest connectingFragmentTest);
 }

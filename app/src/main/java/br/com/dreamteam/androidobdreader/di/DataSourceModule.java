@@ -2,6 +2,8 @@ package br.com.dreamteam.androidobdreader.di;
 
 import javax.inject.Singleton;
 
+import br.com.dreamteam.androidobdreader.model.datasource.obd.ObdBluetoothDataSource;
+import br.com.dreamteam.androidobdreader.model.datasource.obd.ObdDataSource;
 import br.com.dreamteam.androidobdreader.model.datasource.version.LocalVersionDataSource;
 import br.com.dreamteam.androidobdreader.model.datasource.version.VersionDataSource;
 import dagger.Module;
@@ -19,6 +21,12 @@ public class DataSourceModule {
     @Singleton
     VersionDataSource providesVersionDataSource() {
         return new LocalVersionDataSource();
+    }
+
+    @Provides
+    @Singleton
+    ObdDataSource providesObdDataSource(ObdBluetoothDataSource obdBluetoothDataSource) {
+        return obdBluetoothDataSource;
     }
 
 

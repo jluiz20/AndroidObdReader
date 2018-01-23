@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 27
@@ -9,12 +9,13 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
         testInstrumentationRunner "br.com.dreamteam.androidobdreader.MockTestRunner"
         ndk {
             abiFilters "armeabi-v7a", "x86", "armeabi", "mips"
         }
         multiDexEnabled true
+        manifestPlaceholders = [HOCKEYAPP_APP_ID: System.getenv("OBD_READER_HOCKEYAPP_APP_ID")]
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -41,9 +42,7 @@ android {
         }
     }
     lintOptions {
-        checkReleaseBuilds false
         abortOnError false
-        checkReleaseBuilds false
     }
 }
 
@@ -68,19 +67,25 @@ dependencies {
     implementation "com.android.support:design:${supportLibraryVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.jakewharton:butterknife:${butterKnifeVersion}"
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
-
-
     implementation "com.google.dagger:dagger:${daggerVersion}"
     annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
     compileOnly 'org.glassfish:javax.annotation:10.0-b28'
     implementation "org.greenrobot:eventbus:${eventbusVersion}"
-
     implementation 'com.android.support:multidex:1.0.2'
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
     implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+
+    implementation 'com.stepstone.stepper:material-stepper:4.3.1'
+    androidTestImplementation('com.stepstone.stepper:espresso-material-stepper:4.3.1', {
+        exclude group: 'com.android.support.test.espresso'
+    })
+
+    implementation 'net.hockeyapp.android:HockeySDK:5.1.0'
 
     //Tests
     testImplementation 'junit:junit:4.12'
@@ -99,36 +104,4 @@ dependencies {
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:${espressoCore}"
     androidTestImplementation "com.android.support.test.espresso:espresso-contrib:${espressoCore}"
     androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
-
 }
-
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
-    group = "Reporting"
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = ['**/R.class',
-                      '**/R$*.class',
-                      '**/BuildConfig.*',
-                      '**/*$ViewInjector*.*',
-                      '**/*$ViewBinder*.*',
-                      '**/*$MembersInjector*.*',
-                      '**/Manifest*.*',
-                      '**/*Test*.*',
-                      'android/**/*.*']
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories = files([mainSrc])
-
-    classDirectories = files([debugTree])
-
-    executionData = fileTree(dir: project.projectDir, includes: ['**/*.exec’ , ‘**/*.ec'])
-}
-
-task instrumentTest(dependsOn: connectedCheck)

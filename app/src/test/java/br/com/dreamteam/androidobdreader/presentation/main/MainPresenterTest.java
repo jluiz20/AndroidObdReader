@@ -16,6 +16,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.com.dreamteam.androidobdreader.model.usecase.UseCaseCallback;
+import br.com.dreamteam.androidobdreader.model.usecase.obd.GetIsBluetoothSupported;
 import br.com.dreamteam.androidobdreader.model.usecase.version.GetAppVersion;
 
 import static junit.framework.Assert.assertNotNull;
@@ -40,13 +41,17 @@ public class MainPresenterTest {
     @InjectMocks
     @SuppressWarnings("WeakerAccess")
     MainPresenter mainPresenter;
+    @Mock
+    GetIsBluetoothSupported getIsBluetoothSupported;
+    @Mock
+    private MainContract.View view;
 
     @Mock
     private GetAppVersion getAppVersion;
-    @Mock
-    private MainActivityContract.View view;
     @Captor
     private ArgumentCaptor<UseCaseCallback<String>> caseCallbackArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<UseCaseCallback<Boolean>> boolCallbackArgumentCaptor;
     @Mock
     private Exception exception;
 
@@ -96,6 +101,51 @@ public class MainPresenterTest {
         verify(getAppVersion).execute(caseCallbackArgumentCaptor.capture());
 
         caseCallbackArgumentCaptor.getValue().onError(exception);
+
+        verifyZeroInteractions(view);
+    }
+
+    @Test
+    public void test_loadIsBluetoothSupported_supported() throws Exception {
+
+        mainPresenter.loadIsBluetoothSupported();
+
+        verify(getIsBluetoothSupported).execute(boolCallbackArgumentCaptor.capture());
+
+        boolCallbackArgumentCaptor.getValue().onSuccess(true);
+
+        verifyZeroInteractions(view);
+    }
+
+    @Test
+    public void test_loadIsBluetoothSupported_not_supported() throws Exception {
+        mainPresenter.loadIsBluetoothSupported();
+
+        verify(getIsBluetoothSupported).execute(boolCallbackArgumentCaptor.capture());
+        boolCallbackArgumentCaptor.getValue().onSuccess(false);
+
+        verify(view).showBluetoothIsNotSupported();
+    }
+
+    @Test
+    public void test_loadIsBluetoothSupported_ViewPause() throws Exception {
+
+        mainPresenter.loadIsBluetoothSupported();
+        mainPresenter.onViewPause(view);
+
+        verify(getIsBluetoothSupported).execute(boolCallbackArgumentCaptor.capture());
+        boolCallbackArgumentCaptor.getValue().onSuccess(true);
+
+        verifyZeroInteractions(view);
+    }
+
+    @Test
+    public void test_loadIsBluetoothSupported_error() throws Exception {
+
+        mainPresenter.loadIsBluetoothSupported();
+
+        verify(getIsBluetoothSupported).execute(boolCallbackArgumentCaptor.capture());
+        boolCallbackArgumentCaptor.getValue().onError(exception);
 
         verifyZeroInteractions(view);
     }

@@ -1,23 +1,18 @@
-package br.com.dreamteam.androidobdreader.presentation.main;
+package br.com.dreamteam.androidobdreader.presentation.connection.fragments.turnvehicleon;
 
 
 /**
- * This class is an example of a contract for a screen and its presenter.
+ * This class is a contract for the connection screen
  *
  * @author João Luiz Vieira <vieira.jluiz@gmail.com>.
  */
 
-public interface MainActivityContract {
+public interface TurnVehicleOnContract {
 
     /**
      * View part of the contract.
      */
     interface View {
-
-        /**
-         * Show the app version.
-         */
-        void showAppVersion(String appVersion);
 
     }
 
@@ -37,6 +32,5 @@ public interface MainActivityContract {
          * references to an Activity or fragment for example.
          */
         void onViewPause(View view);
-
     }
 }

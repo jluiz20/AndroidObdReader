@@ -6,6 +6,7 @@ import android.util.Log;
 import javax.inject.Inject;
 
 import br.com.dreamteam.androidobdreader.model.usecase.UseCaseCallback;
+import br.com.dreamteam.androidobdreader.model.usecase.obd.GetIsBluetoothSupported;
 import br.com.dreamteam.androidobdreader.model.usecase.version.GetAppVersion;
 import br.com.dreamteam.androidobdreader.presentation.BasePresenter;
 
@@ -14,13 +15,16 @@ import br.com.dreamteam.androidobdreader.presentation.BasePresenter;
  *
  * @author João Luiz Vieira <vieira.jluiz@gmail.com>.
  */
-public class MainPresenter extends BasePresenter implements MainActivityContract.Presenter {
+public class MainPresenter extends BasePresenter implements MainContract.Presenter {
 
     private static final String TAG = "MainPresenter";
     @Inject
     GetAppVersion getAppVersion;
 
-    private MainActivityContract.View view;
+    @Inject
+    GetIsBluetoothSupported getIsBluetoothSupported;
+
+    private MainContract.View view;
 
     @Inject
     public MainPresenter() {
@@ -28,10 +32,10 @@ public class MainPresenter extends BasePresenter implements MainActivityContract
     }
 
     @Override
-    public void onViewResume(MainActivityContract.View view) {
+    public void onViewResume(MainContract.View view) {
         Log.d(TAG, "onViewResume: ");
         attachView(view);
-
+        loadIsBluetoothSupported();
         loadProperties();
     }
 
@@ -58,29 +62,47 @@ public class MainPresenter extends BasePresenter implements MainActivityContract
         });
     }
 
+    void loadIsBluetoothSupported() {
+        Log.d(TAG, "loadIsBluetoothSupported: ");
+        getIsBluetoothSupported.execute(new UseCaseCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean data) {
+                Log.d(TAG, "loadIsBluetoothSupported:  onSuccess: " + data);
+                if (hasViewAttached() && !data) {
+                    view.showBluetoothIsNotSupported();
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d(TAG, "loadAppVersion: onError: ");
+                defaultErrorHandling(TAG, e);
+            }
+        });
+    }
+
 
     private boolean hasViewAttached() {
         return view != null;
     }
 
-    private void attachView(MainActivityContract.View view) {
+    private void attachView(MainContract.View view) {
         Log.d(TAG, "attachView: " + view.toString());
         this.view = view;
     }
 
     @Override
-    public void onViewPause(MainActivityContract.View view) {
+    public void onViewPause(MainContract.View view) {
         Log.d(TAG, "onViewPaused: ");
         detachView(view);
     }
 
-
-    private void detachView(MainActivityContract.View view) {
+    private void detachView(MainContract.View view) {
         Log.d(TAG, "detachView: " + view.toString());
         this.view = null;
     }
 
-    MainActivityContract.View getView() {
+    MainContract.View getView() {
         return view;
     }
 }

@@ -1,15 +1,18 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+
     repositories {
         mavenCentral()
         google()
         jcenter()
+        maven {
+            url "https://dl.bintray.com/fabian/maven"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-        
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -23,9 +26,13 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
+        maven {
+            url "https://dl.bintray.com/fabian/maven"
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+

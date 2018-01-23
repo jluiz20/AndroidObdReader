@@ -1,6 +1,59 @@
 <resources>
+    <!--General -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!--Main Activity -->
     <string name="app_name">AndroidObdReader</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="alert_location_permission_required_title">Location permission required</string>
+    <string name="alert_location_permission_required_description">Location permission is required for improving discovery of new bluetooth devices. Do you want to enable it now?</string>
+
+    <string name="alert_bluetooth_not_supported_title">Bluetooth not supported!</string>
+    <string name="alert_bluetooth_not_supported_title_description">Unfortunately your device does not have bluetooth. This app is useless without bluetooth :( Sorry</string>
+
+
+    <!--Connection Steps -->
+    <!--Connect OBD -->
+    <string name="connection_step_connect_obd_title">Connect device</string>
+    <string name="connection_step_connect_obd_explanation">Connect the device to your vehicle</string>
+    <string name="connection_step_connect_obd_click_next">Click NEXT when connected</string>
+    <!--Turn Vehicle ON -->
+    <string name="connection_step_turn_on_vehicle_title">Turn Vehicle ON</string>
+    <string name="connection_step_turn_on_vehicle_explanation">Turn your Vehicle ON. Make sure it is START position with engine running</string>
+    <string name="connection_step_turn_on_vehicle_click_next">Click NEXT when vehicle ON</string>
+
+    <!--Discovery -->
+    <string name="connection_step_discovery_title">Discovery</string>
+    <string name="connection_step_discovery_subtitle">Looking for devices</string>
+    <string name="connection_step_discovery_explanation">Looking for OBDs. Make sure your car is in start mode</string>
+    <string name="connection_step_select_device">Select a device</string>
+    <string name="connection_step_retry">Try again</string>
+    <string name="connection_step_discovery_paired_devices">Devices Paired</string>
+    <string name="connection_step_discovery_available_devices">Devices Available</string>
+
+    <!--Connecting -->
+    <string name="connection_step_connecting_title">Connecting</string>
+    <string name="connection_step_connecting_explanation">Connecting with the selected OBDII</string>
+
+    <string name="connection_step_connecting_title_success">Success</string>
+    <string name="connection_step_connecting_explanation_success">You are now connected!</string>
+
+    <string name="connection_step_connecting_complete_error_message">Not connected</string>
+
+    <string name="connection_step_connecting_title_failed">Connection Failed</string>
+    <string name="connection_step_connecting_explanation_failed">The connection with the device failed. Try again</string>
+
+    <string name="connection_step_peer_list_title">Devices found</string>
+    <string name="connection_step_peer_list_subtitle">Choose your obd</string>
+    <string name="connection_step_peer_password_title">Password</string>
+    <string name="connection_step_peer_password_subtitle">Type the OBD password</string>
+    <string name="connection_step_peer_connecting_title">Connecting to OBD</string>
+    <string name="connection_step_peer_connecting_subtitle">OBD</string>
+    <string name="connection_step_peer_scanning_title">Scanning</string>
+    <string name="connection_step_peer_scanning_subtitle">Scanning</string>
+
 </resources>

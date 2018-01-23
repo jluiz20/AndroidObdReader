@@ -55,5 +55,4 @@ public class AppModule {
         return uiThread;
     }
 
-
 }

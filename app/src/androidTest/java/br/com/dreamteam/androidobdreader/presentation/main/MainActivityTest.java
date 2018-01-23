@@ -1,8 +1,10 @@
 package br.com.dreamteam.androidobdreader.presentation.main;
 
+import android.Manifest;
 import android.app.Instrumentation;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -18,11 +20,18 @@ import javax.inject.Inject;
 import br.com.dreamteam.androidobdreader.MockObdReaderApplication;
 import br.com.dreamteam.androidobdreader.R;
 import br.com.dreamteam.androidobdreader.di.TestComponent;
+import br.com.dreamteam.androidobdreader.presentation.connection.ConnectionStepsActivity;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.IsNot.not;
 import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.verify;
 
@@ -35,7 +44,7 @@ import static org.mockito.Mockito.verify;
 public class MainActivityTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(
+    public IntentsTestRule<MainActivity> activityRule = new IntentsTestRule<>(
             MainActivity.class,
             true,     // initialTouchMode
             true); // launchActivity. False so we can customize the intent per test method
@@ -43,10 +52,14 @@ public class MainActivityTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Inject
-    MainActivityContract.Presenter presenter;
+    @Rule//Grant the needed permissions
+    public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION);
 
-    private ArgumentCaptor<MainActivityContract.View> viewArgumentCaptor;
+
+    @Inject
+    MainContract.Presenter presenter;
+
+    private ArgumentCaptor<MainContract.View> viewArgumentCaptor;
 
     @Before
     public void setUp() {
@@ -59,7 +72,7 @@ public class MainActivityTest {
     @Test
     public void test_AppVersion() {
         activityRule.getActivity().runOnUiThread(() -> {
-            viewArgumentCaptor = ArgumentCaptor.forClass(MainActivityContract.View.class);
+            viewArgumentCaptor = ArgumentCaptor.forClass(MainContract.View.class);
             verify(presenter).onViewResume(viewArgumentCaptor.capture());
         });
         activityRule.getActivity().runOnUiThread(() -> viewArgumentCaptor.getValue().showAppVersion("1.5.4"));
@@ -67,6 +80,47 @@ public class MainActivityTest {
         onView(withId(R.id.app_version))
                 .check(matches(withText("1.5.4")));
 
+        clearInvocations(presenter);
+    }
+
+    @Test
+    public void test_connectButton() {
+        activityRule.getActivity().runOnUiThread(() -> {
+            viewArgumentCaptor = ArgumentCaptor.forClass(MainContract.View.class);
+            verify(presenter).onViewResume(viewArgumentCaptor.capture());
+        });
+
+        onView(withId(R.id.button_connect)).check(matches(isDisplayed())).perform(click());
+
+        intended(hasComponent(ConnectionStepsActivity.class.getName()));
+
+        clearInvocations(presenter);
+    }
+
+
+    @Test
+    public void test_bluetoothSupported() {
+        activityRule.getActivity().runOnUiThread(() -> {
+            viewArgumentCaptor = ArgumentCaptor.forClass(MainContract.View.class);
+            verify(presenter).onViewResume(viewArgumentCaptor.capture());
+        });
+
+        onView(withId(R.id.button_connect)).check(matches(isEnabled()));
+
+        clearInvocations(presenter);
+    }
+
+    @Test
+    public void test_bluetoothNotSupported() {
+        activityRule.getActivity().runOnUiThread(() -> {
+            viewArgumentCaptor = ArgumentCaptor.forClass(MainContract.View.class);
+            verify(presenter).onViewResume(viewArgumentCaptor.capture());
+        });
+        activityRule.getActivity().runOnUiThread(() -> viewArgumentCaptor.getValue().showBluetoothIsNotSupported());
+        onView(withText(R.string.alert_bluetooth_not_supported_title)).check(matches(isDisplayed()));
+        onView(withText(android.R.string.ok)).perform(click());
+
+        onView(withId(R.id.button_connect)).check(matches(not(isEnabled())));
         clearInvocations(presenter);
     }
 
