@@ -4,7 +4,7 @@ not released
 [![Build Status](https://travis-ci.org/jluiz20/AndroidObdReader.svg?branch=master)](https://travis-ci.org/jluiz20/AndroidObdReader) ![Quality Gates](https://sonarcloud.io/api/badges/gate?key=br.com.dreamteam.androidobdreader) [![codecov.io](https://codecov.io/gh/jluiz20/AndroidObdReader/coverage.svg?branch=master)](https://codecov.io/gh/jluiz20/AndroidObdReader?branch=master)
 
 
-##Libraries used
+## Libraries used
 - <a href="https://github.com/stepstone-tech/android-material-stepper">Android Material Stepper</a> by <a href="https://github.com/stepstone-tech">StepStone Tech</a>
 - <a href="https://github.com/JakeWharton/butterknife">ButterKnife</a> by <a href="https://github.com/JakeWharton">Jake Wharton</a>
 - <a href="https://github.com/google/dagger">Dagger</a> by <a href="https://github.com/google">Google</a>

@@ -50,4 +50,13 @@ public interface ObdDataSource {
      */
     void connectToDevice(BluetoothDeviceWrapper bluetoothDevice);
 
+    /**
+     * @return the name of the device that is connected
+     */
+    String getConnectedDeviceName();
+
+    /**
+     * @return the address of the device that is connected
+     */
+    String getConnectedDeviceAddress();
 }

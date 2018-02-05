@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.pires.obd.commands.control.VinCommand;
+
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     BottomNavigationView navigation;
     @BindView(R.id.button_connect)
     Button connectButton;
+    @BindView(R.id.connected_device_name)
+    TextView connectedDeviceName;
+    @BindView(R.id.connected_device_address)
+    TextView connectedDeviceAddress;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
         switch (item.getItemId()) {
@@ -59,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 throw new UnsupportedOperationException("Invalid option for Navigation bar: " + item.getItemId());
         }
     };
+
+    @OnClick(R.id.send_command)
+    void onSendCommandClick() {
+        presenter.onUserWantToSendCommand(new VinCommand());
+    }
 
     @OnClick(R.id.button_connect)
     void onConnectClick() {
@@ -173,6 +184,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public void showBluetoothIsNotSupported() {
         connectButton.setEnabled(false);
         showAlertBluetoothNotSupported();
+    }
+
+    @Override
+    public void showConnectedDeviceName(String name) {
+        connectedDeviceName.setText(name);
+    }
+
+    @Override
+    public void showConnectedDeviceAddress(String address) {
+        connectedDeviceAddress.setText(address);
     }
 
     private void hockeyAppCheckForCrashes() {

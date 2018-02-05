@@ -54,4 +54,14 @@ public class ObdRepositoryImpl implements ObdRepository {
     public void connectToDevice(BluetoothDeviceWrapper bluetoothDevice) {
         bluetoothDataSource.connectToDevice(bluetoothDevice);
     }
+
+    @Override
+    public String getConnectedDeviceName() {
+        return bluetoothDataSource.getConnectedDeviceName();
+    }
+
+    @Override
+    public String getConnectedDeviceAddress() {
+        return bluetoothDataSource.getConnectedDeviceAddress();
+    }
 }

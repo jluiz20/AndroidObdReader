@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,6 +35,8 @@ import br.com.dreamteam.androidobdreader.model.datasource.obd.states.ObdDiscover
 public class ObdBluetoothDataSource implements ObdDataSource {
 
     private static final String TAG = "ObdBluetoothDataSource";
+    private static final String PREFS_CONNECTION_ADDRESS = "PREFS_CONNECTION_ADDRESS";
+    private static final String PREFS_CONNECTION_NAME = "PREFS_CONNECTION_NAME";
     private final EventBus eventBus;
     BluetoothAdapter mBluetoothAdapter;
     @Inject
@@ -142,5 +146,26 @@ public class ObdBluetoothDataSource implements ObdDataSource {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onObdConnectionSuccessfulChanged(ObdConnectionSuccessfulChanged event) {
         Log.d(TAG, "onMessageEvent: " + event.getDispatchTime());
+        saveConnectionPartner(event.getBluetoothSocket().getRemoteDevice().getName(), event.getBluetoothSocket().getRemoteDevice().getAddress());
+    }
+
+    private void saveConnectionPartner(String name, String macAddress) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PREFS_CONNECTION_NAME, name);
+        editor.putString(PREFS_CONNECTION_ADDRESS, macAddress);
+        editor.commit();
+    }
+
+    @Override
+    public String getConnectedDeviceName() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(PREFS_CONNECTION_NAME, "");
+    }
+
+    @Override
+    public String getConnectedDeviceAddress() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(PREFS_CONNECTION_ADDRESS, "");
     }
 }

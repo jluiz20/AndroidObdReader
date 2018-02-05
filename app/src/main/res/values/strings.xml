@@ -15,6 +15,8 @@
     <string name="alert_bluetooth_not_supported_title">Bluetooth not supported!</string>
     <string name="alert_bluetooth_not_supported_title_description">Unfortunately your device does not have bluetooth. This app is useless without bluetooth :( Sorry</string>
 
+    <string name="connected_device_name_label">Connected Device Name: </string>
+    <string name="connected_device_address_label">Connected Device Address: </string>
 
     <!--Connection Steps -->
     <!--Connect OBD -->

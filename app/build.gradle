@@ -87,6 +87,8 @@ dependencies {
 
     implementation 'net.hockeyapp.android:HockeySDK:5.1.0'
 
+    implementation 'com.github.pires:obd-java-api:1.0'
+
     //Tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "com.android.support.test:runner:${supportTest}"

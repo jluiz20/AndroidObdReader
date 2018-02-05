@@ -3,9 +3,18 @@ package br.com.dreamteam.androidobdreader.presentation.main;
 
 import android.util.Log;
 
+import com.github.pires.obd.commands.ObdCommand;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
+import br.com.dreamteam.androidobdreader.model.datasource.obd.states.ObdSendCommand;
 import br.com.dreamteam.androidobdreader.model.usecase.UseCaseCallback;
+import br.com.dreamteam.androidobdreader.model.usecase.obd.GetConnectedDeviceAddress;
+import br.com.dreamteam.androidobdreader.model.usecase.obd.GetConnectedDeviceName;
 import br.com.dreamteam.androidobdreader.model.usecase.obd.GetIsBluetoothSupported;
 import br.com.dreamteam.androidobdreader.model.usecase.version.GetAppVersion;
 import br.com.dreamteam.androidobdreader.presentation.BasePresenter;
@@ -24,6 +33,15 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
     @Inject
     GetIsBluetoothSupported getIsBluetoothSupported;
 
+    @Inject
+    GetConnectedDeviceName getConnectedDeviceName;
+
+    @Inject
+    GetConnectedDeviceAddress getConnectedDeviceAddress;
+
+    @Inject
+    EventBus eventBus;
+
     private MainContract.View view;
 
     @Inject
@@ -41,6 +59,8 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
 
     private void loadProperties() {
         loadAppVersion();
+        loadConnectedDeviceName();
+        loadConnectedDeviceAddress();
     }
 
     void loadAppVersion() {
@@ -81,6 +101,43 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
         });
     }
 
+    void loadConnectedDeviceName() {
+        Log.d(TAG, "loadConnectedDeviceName: ");
+        getConnectedDeviceName.execute(new UseCaseCallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                Log.d(TAG, "loadConnectedDeviceName:  onSuccess: " + data);
+                if (hasViewAttached()) {
+                    view.showConnectedDeviceName(data);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d(TAG, "loadConnectedDeviceName: onError: ");
+                defaultErrorHandling(TAG, e);
+            }
+        });
+    }
+
+    void loadConnectedDeviceAddress() {
+        Log.d(TAG, "loadConnectedDeviceAddress: ");
+        getConnectedDeviceAddress.execute(new UseCaseCallback<String>() {
+            @Override
+            public void onSuccess(String data) {
+                Log.d(TAG, "loadConnectedDeviceAddress:  onSuccess: " + data);
+                if (hasViewAttached()) {
+                    view.showConnectedDeviceAddress(data);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d(TAG, "loadConnectedDeviceAddress: onError: ");
+                defaultErrorHandling(TAG, e);
+            }
+        });
+    }
 
     private boolean hasViewAttached() {
         return view != null;
@@ -95,6 +152,11 @@ public class MainPresenter extends BasePresenter implements MainContract.Present
     public void onViewPause(MainContract.View view) {
         Log.d(TAG, "onViewPaused: ");
         detachView(view);
+    }
+
+    @Override
+    public void onUserWantToSendCommand(ObdCommand command) {
+        this.eventBus.post(new ObdSendCommand(Calendar.getInstance(), command));
     }
 
     private void detachView(MainContract.View view) {

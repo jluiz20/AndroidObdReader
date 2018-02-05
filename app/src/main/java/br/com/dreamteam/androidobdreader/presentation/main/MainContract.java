@@ -1,6 +1,8 @@
 package br.com.dreamteam.androidobdreader.presentation.main;
 
 
+import com.github.pires.obd.commands.ObdCommand;
+
 /**
  * This class is an example of a contract for a screen and its presenter.
  *
@@ -24,6 +26,19 @@ public interface MainContract {
          */
         void showBluetoothIsNotSupported();
 
+        /**
+         * Shows the name of the connected device
+         *
+         * @param name
+         */
+        void showConnectedDeviceName(String name);
+
+        /**
+         * Shows the address of the connected device
+         *
+         * @param address
+         */
+        void showConnectedDeviceAddress(String address);
     }
 
     /**
@@ -42,6 +57,13 @@ public interface MainContract {
          * references to an Activity or fragment for example.
          */
         void onViewPause(View view);
+
+        /**
+         * Sends command by obd
+         *
+         * @param command the command
+         */
+        void onUserWantToSendCommand(ObdCommand command);
 
     }
 }
