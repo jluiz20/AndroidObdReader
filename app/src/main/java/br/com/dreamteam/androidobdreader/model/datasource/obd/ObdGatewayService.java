@@ -78,8 +78,6 @@ public class ObdGatewayService extends Service {
             }
         }
     };
-    @Inject
-    EventBus eventBus;
     private Long queueCounter = 0L;
     private BlockingQueue<ObdCommandJob> jobsQueue = new LinkedBlockingQueue<>();
     private BluetoothSocket socket;
@@ -156,14 +154,14 @@ public class ObdGatewayService extends Service {
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mBroadcastReceiver3, intentFilter);
-        eventBus.register(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver3);
-        eventBus.unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 
     /**
